@@ -102,6 +102,61 @@ utils.fprintf (f, "%s\n","hello, world!")
 - 如果`t`和`T`存在相同key时，`T`的值不会被覆盖，但是会通过`fprintf()`输出一条警告信息到stderr，且无法关闭，同时函数自身不会返回错误状态和错误信息
 - 因为上述各种奇怪的feature，有类似需求还是自己实现比较靠谱。
 
+```lua
+--func4
+local t1 = {name1 = "t1",a = "text"}
+local t2 = {name2 = "t2",a = "func"} 
+utils.import(t1,t2)
+for k,v in pairs(t2) do
+  print(k,v)
+end
+
+--output
+name1	t1
+name2	t2
+a	func
+warning: '?.a' will not override existing symbol
+```
+
+
+
+#### **escape (s)**
+
+转义任何`magic`字符为string
+
+*s*：输入的字符
+
+- 关于*magic*字符：[LUA Reference](http://www.lua.org/manual/5.1/manual.html#5.4.1)
+
+```lua
+local s = "%a%c"
+utils.printf(utils.escape("%s\n"),"hello, world!")
+--output
+%s
+```
+
+
+
+#### **choose (cond, value1, value2)**
+
+根据条件*cond*返回值，为真返回*value1*，反之返回*value2*
+
+*cond*：条件
+
+*value1*：*cond*为真时返回
+
+*value2*：cond为假时返回(可选)
+
+```lua
+local a,b 
+a,b = utils.choose(true,"a","b")
+print(a,b)
+a,b = utils.choose(nil,"a","b")
+print(a,b)
+a,b = utils.choose("a","b")
+print(a,b)
+```
+
 
 
 
