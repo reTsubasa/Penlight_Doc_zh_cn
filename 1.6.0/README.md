@@ -159,6 +159,170 @@ print(a,b)
 
 
 
+#### **readfile (filename, is_bin)**
+
+以字符形式返回文件内容
+
+*filename*：文件路径
+
+*is_bin*：二进制模式
+
+
+
+**writefile (filename, str, is_bin)**
+
+将字符写入文件
+
+*filename*：文件路径
+
+*str*：待写入的字符
+
+*is_bin*：二进制模式
+
+**返回**
+
+1. true 或 nil
+2. 错误信息
+
+**报错**
+
+如果*filename*或*str*不是字符时，则报错
+
+
+
+#### **readlines (filename)**
+
+读取文件，返回一个array table，其元素为文件每行的内容
+
+*filename*：文件路径
+
+**返回**
+
+文件内容的一个table
+
+**报错**
+
+如果*filename*不是字符
+
+
+
+#### split (s, re, plain, n)
+
+根据分隔符切分字符，并返回切分后的array table
+
+*s*：输入的字符
+
+*re*：lua正则表达式，默认值为`%s+`
+
+*plain*：不使用lua正则
+
+*n*：(可选)最大切分的个数
+
+**返回**
+
+array table
+
+**报错**
+
+*s*不是字符时
+
+
+
+#### **splitv (s, re)**
+
+切分字符为几个值
+
+*s*：输入的字符
+
+*re*：分隔符，默认是空格
+
+**返回**
+
+切分数量的值
+
+```lua
+first,next = splitv('jane:doe',':')
+```
+
+
+
+#### **array_tostring (t, temp, tostr)**
+
+将一个array table的值转换为str
+
+*t*：一个array table
+
+*temp*：(可选)缓冲区，不指定则自动分配
+
+*tostr*：(可选)自定义转换函数，并以*t*的value,i作为入参传递。默认为tostring
+
+**返回**
+
+temp
+
+
+
+- *tostr*函数不给定的场景下，函数使用`tostring`转换，没太多实际价值
+- *temp*推荐是一个upvalue table，可以降低内存的分配
+
+```lua
+local function ts(v,i)
+  return v+i
+end
+local tb = {1,2,3,4,5,6,}
+local temp = {}
+utils.array_tostring(tb,temp,ts)
+print(json.encode(temp))
+
+--output
+[2,4,6,8,10,12]
+```
+
+
+
+#### **quote_arg (argument)**
+
+引用一条命令的一个参数。引用的参数用于传递到`os.execute`, `pl.utils.execute` 或`pl.utils.executeex`.
+
+*argument*：(string)参数
+
+**返回**
+
+引用的参数
+
+
+
+#### **executeex (cmd, bin)**
+
+执行一条shell命令，并返回其输出。本函数会重定向输出到临时文件并返回这些文件的内容
+
+*cmd*：一个shell命令
+
+*bin*：布尔值。如果为true，则以二进制模式读取临时文件
+
+**返回**
+
+1. true or nil，表示执行状态
+2. 执行返回code
+3. stdout 输出
+4. 错误输出
+
+
+
+#### **memoize (func)**
+
+缓存*func*返回值，用于下次调用。方法特别适用于调用函数成本很高，但又很难预期其调用时间
+
+*func*：至少包含一个参数的函数
+
+
+
+**返回**
+
+至少包含一个参数函数，该参数将被视作key
+
+
+
 
 ## 类
 
